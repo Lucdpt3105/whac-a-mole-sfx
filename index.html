@@ -1,17 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whac a Mole</title>
+    <title>Whac-a-Mole</title>
     <link rel="stylesheet" href="mole.css">
-    <script src="mole.js"></script>
+    <script src="mole.js" defer></script>
 </head>
 <body>
-    <h1>Whac a Mole</h1>
-    <h2 id="score">0</h2>
-    <!-- 3x3 -->
-    <div id="board">
-    </div>
+    <main class="game-shell">
+        <h1>Whac-a-Mole</h1>
+        <p id="score" aria-live="polite">Điểm: 0</p>
+        <section class="controls" aria-label="Điều khiển trò chơi">
+            <button id="restart-button" type="button">Chơi lại</button>
+            <button id="music-button" type="button" aria-pressed="true">♪ Nhạc: Bật</button>
+        </section>
+        <!-- <section class="instructions" aria-labelledby="instructions-title">
+            <h2 id="instructions-title">Cách chơi</h2>
+            <p>Nhấp vào chú chuột chũi để nhận 10 điểm. Đừng nhấp vào cây ăn thịt — trò chơi sẽ kết thúc!</p>
+        </section> -->
+        <div id="board" role="grid" aria-label="Bàn chơi Whac-a-Mole"></div>
+    </main>
+    <!-- Nhạc nền chỉ bắt đầu sau lần chạm đầu tiên, theo chính sách trình duyệt. -->
+    <audio id="theme-music" src="theme-music.mp3" loop preload="auto"></audio>
 </body>
 </html>
