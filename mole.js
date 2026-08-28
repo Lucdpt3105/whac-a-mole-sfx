@@ -70,7 +70,7 @@ function setMole() {
     let num = getRandomTile();
     if (currPlantTile && currPlantTile.id == num) return;
     let mole = document.createElement("img");
-    mole.src = "./monty-mole.png";
+    mole.src = "./asset/monty-mole.webp";
     mole.alt = "Chuột chũi";
     currMoleTile = document.getElementById(num);
     currMoleTile.appendChild(mole);
@@ -84,7 +84,7 @@ function setPlant() {
     let num = getRandomTile();
     if (currMoleTile && currMoleTile.id == num) return;
     let plant = document.createElement("img");
-    plant.src = "./piranha-plant.png";
+    plant.src = "./asset/piranha-plant.webp";
     plant.alt = "Cây ăn thịt";
     currPlantTile = document.getElementById(num);
     currPlantTile.appendChild(plant);

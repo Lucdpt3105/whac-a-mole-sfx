@@ -7,7 +7,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     color: #fff;
-    background: url("./mario-bg.jpg") center / cover fixed;
+    background: url("./asset/mario-bg.jpg") center / cover fixed;
 }
 
 .game-shell { width: min(100%, 600px); margin: 0 auto; }
@@ -28,7 +28,7 @@ h1 { margin: 0; font-size: clamp(2rem, 7vw, 3rem); text-shadow: 2px 3px 0 #55270
     gap: 6px;
     padding: 6px;
     overflow: hidden;
-    background: url("./soil.png") center / cover;
+    background: url("./asset/soil.png") center / cover;
     border: 3px solid white;
     border-radius: 25px;
 }
@@ -41,7 +41,7 @@ h1 { margin: 0; font-size: clamp(2rem, 7vw, 3rem); text-shadow: 2px 3px 0 #55270
     border: 0;
     appearance: none;
     background-color: transparent;
-    background-image: url("./pipe.png");
+    background-image: url("./asset/pipe.png");
         background-size: cover;
         cursor: pointer;
     }
