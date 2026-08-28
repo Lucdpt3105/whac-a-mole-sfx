@@ -5,6 +5,7 @@ let gameOver = false;
 let moleInterval;
 let plantInterval;
 let musicStarted = false;
+const audioSettings = { system: true, sfx: true, music: true, systemVolume: 0.55, sfxVolume: 1, musicVolume: 0.5 };
 
 // Đặt các file hiệu ứng của bạn trong thư mục sounds/ với đúng tên bên dưới.
 // Game vẫn chạy bình thường nếu một file chưa được thêm.
@@ -13,6 +14,7 @@ const soundEffects = {
     wrongHit: new Audio("sounds/wrong-hit.mp3"),
     gameOver: new Audio("sounds/game-over.mp3"),
     restart: new Audio("sounds/restart.mp3"),
+    click: new Audio("sounds/clicking-sound.mp3"),
 };
 
 window.addEventListener("DOMContentLoaded", setGame);
@@ -31,6 +33,18 @@ function setGame() {
     }
     document.getElementById("restart-button").addEventListener("click", restartGame);
     document.getElementById("music-button").addEventListener("click", toggleMusic);
+    document.getElementById("settings-button").addEventListener("click", openSoundSettings);
+    document.getElementById("close-settings-button").addEventListener("click", playSystemSound);
+    document.getElementById("sound-settings").addEventListener("close", () => {
+        document.getElementById("settings-button").setAttribute("aria-expanded", "false");
+    });
+    document.querySelectorAll(".sound-volume").forEach((slider) => slider.addEventListener("input", updateAudioSettings));
+    ["system-sound-toggle", "sfx-sound-toggle", "music-sound-toggle"].forEach((id) => {
+        document.getElementById(id).addEventListener("change", () => {
+            updateAudioSettings();
+            playSystemSound();
+        });
+    });
     document.addEventListener("pointerdown", startMusicOnce, { once: true });
     startRound();
 }
@@ -51,7 +65,8 @@ function restartGame() {
     currPlantTile = null;
     document.getElementById("score").innerText = "Điểm: 0";
     document.querySelectorAll(".tile").forEach((tile) => tile.replaceChildren());
-    playSound("restart",1.0);
+    playSystemSound();
+    applyMusicState();
     startMusicOnce();
     startRound();
 }
@@ -98,7 +113,7 @@ function selectTile() {
     if (this == currMoleTile) {
         score += 10;
         document.getElementById("score").innerText = `Điểm: ${score}`;
-        playSound("moleHit",1.0);
+        playSound("moleHit", 1.0);
     }
     else if (this == currPlantTile) {
         gameOver = true;
@@ -106,32 +121,78 @@ function selectTile() {
         clearInterval(plantInterval);
         document.getElementById("score").innerText = `GAME OVER — Điểm: ${score}`;
         playSound("gameOver", 1.0);
+        // Nhạc được tắt trong lúc thua; chơi lại sẽ tự bật nếu người chơi chưa tắt nhạc trong cài đặt.
+        document.getElementById("theme-music").pause();
     } else {
         playSound("wrongHit", 1.0);
     }
 }
 
 function playSound(name, volume = 1.0) {
+    if (!audioSettings.sfx) return;
     const sound = soundEffects[name];
     if (!sound) return;
-    sound.currentTime = 0;
-    sound.volume = volume;
-    sound.play().catch(() => {});
+    const instance = sound.cloneNode();
+    instance.volume = volume * audioSettings.sfxVolume;
+    instance.play().catch(() => {});
+}
+
+function playSystemSound() {
+    if (!audioSettings.system) return;
+    const instance = soundEffects.click.cloneNode();
+    instance.volume = audioSettings.systemVolume;
+    instance.play().catch(() => {});
 }
 
 function startMusicOnce() {
     const music = document.getElementById("theme-music");
-    if (!musicStarted && !music.muted) {
-        music.volume = 0.5;
+    if (!musicStarted && audioSettings.music && !music.muted && !gameOver) {
+        music.volume = audioSettings.musicVolume;
         music.play().then(() => { musicStarted = true; }).catch(() => {});
     }
 }
 
 function toggleMusic() {
+    audioSettings.music = !audioSettings.music;
+    document.getElementById("music-sound-toggle").checked = audioSettings.music;
+    playSystemSound();
+    applyMusicState();
+}
+
+function openSoundSettings() {
+    const dialog = document.getElementById("sound-settings");
+    if (!dialog.open) dialog.showModal();
+    document.getElementById("settings-button").setAttribute("aria-expanded", "true");
+    playSystemSound();
+}
+
+function updateAudioSettings() {
+    audioSettings.system = document.getElementById("system-sound-toggle").checked;
+    audioSettings.sfx = document.getElementById("sfx-sound-toggle").checked;
+    audioSettings.music = document.getElementById("music-sound-toggle").checked;
+    audioSettings.systemVolume = getVolume("system");
+    audioSettings.sfxVolume = getVolume("sfx");
+    audioSettings.musicVolume = getVolume("music");
+    applyMusicState();
+}
+
+function getVolume(channel) {
+    const slider = document.getElementById(`${channel}-sound-volume`);
+    const value = Number(slider.value);
+    document.getElementById(`${channel}-sound-volume-value`).value = `${value}%`;
+    return value / 100;
+}
+
+function applyMusicState() {
     const music = document.getElementById("theme-music");
     const button = document.getElementById("music-button");
-    music.muted = !music.muted;
-    button.setAttribute("aria-pressed", String(!music.muted));
-    button.innerText = music.muted ? "♪ Nhạc: Tắt" : "♪ Nhạc: Bật";
-    if (!music.muted) startMusicOnce();
+    const enabled = audioSettings.music;
+    music.muted = !enabled;
+    music.volume = audioSettings.musicVolume;
+    button.classList.toggle("is-muted", !enabled);
+    button.setAttribute("aria-pressed", String(enabled));
+    button.setAttribute("aria-label", enabled ? "Tắt nhạc nền" : "Bật nhạc nền");
+    if (enabled && !gameOver) startMusicOnce();
+    if (!enabled) music.pause();
+    if (enabled && musicStarted && !gameOver) music.play().catch(() => {});
 }

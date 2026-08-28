@@ -1,5 +1,13 @@
 * { box-sizing: border-box; }
 
+/* Icon UI hiện lấy trực tiếp từ asset bạn đã thêm. */
+:root {
+    --ui-restart-icon: url("./asset/icon-restart.avif");
+    --ui-music-icon: url("./asset/icon-music.png");
+    --ui-music-muted-icon: url("./asset/no-music.png");
+    --ui-settings-icon: url("./asset/icon-settings.png");
+}
+
 body {
     min-height: 100vh;
     margin: 0;
@@ -7,15 +15,20 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     color: #fff;
-    background: url("./asset/mario-bg.jpg") center / cover fixed;
+    background: url("./asset/mario-bg.webp") center / cover fixed;
 }
 
 .game-shell { width: min(100%, 600px); margin: 0 auto; }
 h1 { margin: 0; font-size: clamp(2rem, 7vw, 3rem); text-shadow: 2px 3px 0 #552700; }
 #score { margin: 10px 0 16px; font-size: 1.35rem; font-weight: 700; text-shadow: 1px 2px 2px #000; }
 .controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 14px; }
-.controls button { padding: 10px 16px; border: 2px solid #fff; border-radius: 10px; color: #fff; background: #d52b1e; font: inherit; font-weight: 700; cursor: pointer; }
-.controls button:hover, .controls button:focus-visible { background: #ff4d3e; outline: 3px solid #ffe24f; outline-offset: 2px; }
+.icon-button { width: 64px; height: 64px; padding: 0; border: 2px solid #fff; border-radius: 14px; color: #fff; background-color: rgb(0 0 0 / 18%); background-position: center; background-size: contain; background-repeat: no-repeat; font: 700 1.8rem/1 Arial, sans-serif; cursor: pointer; }
+.icon-button span { display: none; }
+.icon-button:focus-visible { outline: 3px solid #ffe24f; outline-offset: 2px; }
+.restart-icon { background-image: var(--ui-restart-icon); }
+.music-icon { background-image: var(--ui-music-icon); }
+.music-icon.is-muted { background-image: var(--ui-music-muted-icon); }
+.settings-icon { background-image: var(--ui-settings-icon); }
 .instructions { margin: 0 auto 16px; padding: 10px 16px; border-radius: 12px; background: rgb(0 0 0 / 72%); text-align: left; }
 .instructions h2 { margin: 0 0 5px; font-size: 1.1rem; }
 .instructions p { margin: 0; line-height: 1.45; }
@@ -28,7 +41,7 @@ h1 { margin: 0; font-size: clamp(2rem, 7vw, 3rem); text-shadow: 2px 3px 0 #55270
     gap: 6px;
     padding: 6px;
     overflow: hidden;
-    background: url("./asset/soil.png") center / cover;
+    background: url("./asset/soil.webp") center / cover;
     border: 3px solid white;
     border-radius: 25px;
 }
@@ -41,7 +54,7 @@ h1 { margin: 0; font-size: clamp(2rem, 7vw, 3rem); text-shadow: 2px 3px 0 #55270
     border: 0;
     appearance: none;
     background-color: transparent;
-    background-image: url("./asset/pipe.png");
+    background-image: url("./asset/pipe.webp");
         background-size: cover;
         cursor: pointer;
     }
@@ -60,4 +73,21 @@ h1 { margin: 0; font-size: clamp(2rem, 7vw, 3rem); text-shadow: 2px 3px 0 #55270
     -ms-user-select: none;
 }
 
-@media (max-width: 420px) { body { padding-top: 16px; } .controls button { padding: 9px 11px; } }
+.sound-settings { width: min(92vw, 420px); border: 3px solid #fff; border-radius: 18px; padding: 0; color: #fff; background: #3b1d0d; box-shadow: 0 16px 40px rgb(0 0 0 / 50%); }
+.sound-settings::backdrop { background: rgb(0 0 0 / 58%); }
+.sound-settings form { padding: 18px; }
+.settings-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.settings-heading h2 { margin: 0; font-size: 1.6rem; }
+.dialog-close { width: 34px; height: 34px; border: 2px solid #fff; border-radius: 50%; color: #fff; background: #d52b1e; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+.sound-settings p { margin: 8px 0 16px; color: #ffe8b4; }
+.sound-options { display: grid; gap: 10px; }
+.sound-option { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px; border-radius: 10px; background: rgb(255 255 255 / 12%); cursor: pointer; text-align: left; }
+.sound-option-copy { display: grid; gap: 3px; }
+.sound-option small { color: #ffe8b4; }
+.sound-controls { display: grid; grid-template-columns: minmax(72px, 1fr) 40px 42px; align-items: center; gap: 7px; min-width: 180px; }
+.sound-volume { width: 100%; accent-color: #ffe24f; cursor: pointer; }
+.sound-controls output { font-variant-numeric: tabular-nums; color: #ffe8b4; text-align: right; font-size: .85rem; }
+.sound-controls input[type="checkbox"] { width: 42px; height: 23px; margin: 0; accent-color: #4bc34b; cursor: pointer; }
+.sound-option:has(input[type="checkbox"]:not(:checked)) .sound-volume { opacity: .45; }
+
+@media (max-width: 420px) { body { padding-top: 16px; } .controls button { padding: 9px 11px; } .sound-option { align-items: start; flex-direction: column; } .sound-controls { width: 100%; } }

@@ -12,8 +12,15 @@
         <h1>Whac-a-Mole</h1>
         <p id="score" aria-live="polite">Điểm: 0</p>
         <section class="controls" aria-label="Điều khiển trò chơi">
-            <button id="restart-button" type="button">Chơi lại</button>
-            <button id="music-button" type="button" aria-pressed="true">♪ Nhạc: Bật</button>
+            <button id="restart-button" class="icon-button restart-icon" type="button" aria-label="Chơi lại" title="Chơi lại">
+                <span aria-hidden="true">↻</span>
+            </button>
+            <button id="music-button" class="icon-button music-icon" type="button" aria-label="Tắt nhạc nền" title="Bật/tắt nhạc nền" aria-pressed="true">
+                <span aria-hidden="true">♫</span>
+            </button>
+            <button id="settings-button" class="icon-button settings-icon" type="button" aria-label="Mở cài đặt âm thanh" title="Cài đặt âm thanh" aria-expanded="false" aria-controls="sound-settings">
+                <span aria-hidden="true">⚙</span>
+            </button>
         </section>
         <!-- <section class="instructions" aria-labelledby="instructions-title">
             <h2 id="instructions-title">Cách chơi</h2>
@@ -21,6 +28,41 @@
         </section> -->
         <div id="board" role="grid" aria-label="Bàn chơi Whac-a-Mole"></div>
     </main>
+    <dialog id="sound-settings" class="sound-settings" aria-labelledby="sound-settings-title">
+        <form method="dialog">
+            <div class="settings-heading">
+                <h2 id="sound-settings-title">Âm thanh</h2>
+                <button id="close-settings-button" class="dialog-close" type="submit" aria-label="Đóng cài đặt">×</button>
+            </div>
+            <p>Chọn các loại âm thanh bạn muốn nghe.</p>
+            <div class="sound-options">
+                <label class="sound-option" for="system-sound-toggle">
+                    <span class="sound-option-copy"><strong>Âm thanh hệ thống</strong><small>Nhấn nút, mở/đóng cài đặt</small></span>
+                    <span class="sound-controls">
+                        <input id="system-sound-volume" class="sound-volume" type="range" min="0" max="100" value="55" aria-label="Âm lượng hệ thống">
+                        <output id="system-sound-volume-value" for="system-sound-volume">55%</output>
+                        <input id="system-sound-toggle" type="checkbox" role="switch" checked>
+                    </span>
+                </label>
+                <label class="sound-option" for="sfx-sound-toggle">
+                    <span class="sound-option-copy"><strong>Hiệu ứng (SFX)</strong><small>Đập trúng, hụt và thua</small></span>
+                    <span class="sound-controls">
+                        <input id="sfx-sound-volume" class="sound-volume" type="range" min="0" max="100" value="100" aria-label="Âm lượng hiệu ứng">
+                        <output id="sfx-sound-volume-value" for="sfx-sound-volume">100%</output>
+                        <input id="sfx-sound-toggle" type="checkbox" role="switch" checked>
+                    </span>
+                </label>
+                <label class="sound-option" for="music-sound-toggle">
+                    <span class="sound-option-copy"><strong>Nhạc nền</strong><small>Nhạc trong lúc chơi</small></span>
+                    <span class="sound-controls">
+                        <input id="music-sound-volume" class="sound-volume" type="range" min="0" max="100" value="50" aria-label="Âm lượng nhạc nền">
+                        <output id="music-sound-volume-value" for="music-sound-volume">50%</output>
+                        <input id="music-sound-toggle" type="checkbox" role="switch" checked>
+                    </span>
+                </label>
+            </div>
+        </form>
+    </dialog>
     <!-- Nhạc nền chỉ bắt đầu sau lần chạm đầu tiên, theo chính sách trình duyệt. -->
     <audio id="theme-music" src="./sounds/theme-music.mp3" loop preload="auto"></audio>
 </body>

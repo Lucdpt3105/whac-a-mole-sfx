@@ -1,5 +1,4 @@
-## Chuyển ảnh trong asset thành webp
-Tôi nên kiếm asset như thế nào để hợp vibe của game hiện tại 
+ 
 ## thêm menu điều chỉnh âm thanh 
 1. Thêm âm thanh cho âm thanh hệ thống, hiện tại đã có âm thanh cho người chơi khi thua và ấn vào nút "restart" 
 2. giao diện sẽ có thêm nút quản lí âm thanh( tôi sẽ thêm ảnh bánh răng đại diện)
@@ -8,3 +7,5 @@ Tôi nên kiếm asset như thế nào để hợp vibe của game hiện tại
 - Âm thanh sfx tiếng đập hụt, trúng các kiểu
 -Bật tắt âm thanh nhạc nền
 Điều chỉnh âm thanh nhạc nền khi thua sẽ bị tắt, khi ấn chơi lại sẽ bật lại nhạc
+
+Thay thế 2 nút "chơi lại" và "nhạc" hiện tại thành 2 icon mang phong cách của game
