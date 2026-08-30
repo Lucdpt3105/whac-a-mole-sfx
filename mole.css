@@ -134,7 +134,7 @@ h1 { margin: 0; font-size: clamp(2rem, 7vw, 3rem); text-shadow: 2px 3px 0 #55270
 
 .sound-controls input[type="checkbox"]:active { transform: scale(0.94); }
 
-@m@media (max-width: 600px) {
+@media (max-width: 600px) {
     .controls { position: static; display: flex; flex-direction: row; justify-content: center; gap: 8px; margin: 10px auto 14px; }
     .icon-button { width: 64px; height: 52px; border-width: 3px; border-radius: 12px; background-size: 42px; }
 }@media (max-width: 420px) { body { padding-top: 16px; } .controls button { padding: 9px 11px; } .sound-option { align-items: stretch; flex-direction: column; gap: 8px; } .sound-controls { flex: none; grid-template-columns: minmax(0, 1fr) 42px 30px; width: 100%; } }
