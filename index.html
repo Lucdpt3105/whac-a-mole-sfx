@@ -10,7 +10,7 @@
 <body>
     <main class="game-shell">
         <h1>Whac-a-Mole</h1>
-        <p id="score" aria-live="polite">Điểm: 0</p>
+        <p id="score" aria-live="polite">Score: 0</p>
         <section class="controls" aria-label="Điều khiển trò chơi">
             <button id="restart-button" class="icon-button restart-icon" type="button" aria-label="Chơi lại" title="Chơi lại">
                 <span aria-hidden="true">↻</span>
@@ -31,13 +31,13 @@
     <dialog id="sound-settings" class="sound-settings" aria-labelledby="sound-settings-title">
         <form method="dialog">
             <div class="settings-heading">
-                <h2 id="sound-settings-title">Âm thanh</h2>
+                <h2 id="sound-settings-title">Settings</h2>
                 <button id="close-settings-button" class="dialog-close" type="submit" aria-label="Đóng cài đặt">×</button>
             </div>
-            <p>Chọn các loại âm thanh bạn muốn nghe.</p>
+            <!-- <p>Chọn các loại âm thanh bạn muốn nghe.</p> -->
             <div class="sound-options">
                 <label class="sound-option" for="system-sound-toggle">
-                    <span class="sound-option-copy"><strong>Âm thanh hệ thống</strong><small>Nhấn nút, mở/đóng cài đặt</small></span>
+                    <span class="sound-option-copy"><strong>System sounds</strong></span>
                     <span class="sound-controls">
                         <input id="system-sound-volume" class="sound-volume" type="range" min="0" max="100" value="55" aria-label="Âm lượng hệ thống">
                         <output id="system-sound-volume-value" for="system-sound-volume">55%</output>
@@ -45,7 +45,7 @@
                     </span>
                 </label>
                 <label class="sound-option" for="sfx-sound-toggle">
-                    <span class="sound-option-copy"><strong>Hiệu ứng (SFX)</strong><small>Đập trúng, hụt và thua</small></span>
+                    <span class="sound-option-copy"><strong>Sound Effects (SFX)</strong></span>
                     <span class="sound-controls">
                         <input id="sfx-sound-volume" class="sound-volume" type="range" min="0" max="100" value="100" aria-label="Âm lượng hiệu ứng">
                         <output id="sfx-sound-volume-value" for="sfx-sound-volume">100%</output>
@@ -53,7 +53,7 @@
                     </span>
                 </label>
                 <label class="sound-option" for="music-sound-toggle">
-                    <span class="sound-option-copy"><strong>Nhạc nền</strong><small>Nhạc trong lúc chơi</small></span>
+                    <span class="sound-option-copy"><strong>Background Music</strong></span>
                     <span class="sound-controls">
                         <input id="music-sound-volume" class="sound-volume" type="range" min="0" max="100" value="50" aria-label="Âm lượng nhạc nền">
                         <output id="music-sound-volume-value" for="music-sound-volume">50%</output>
