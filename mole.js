@@ -68,7 +68,7 @@ function restartGame() {
     gameOver = false;
     currMoleTile = null;
     currPlantTile = null;
-    document.getElementById("score").innerText = "Điểm: 0";
+    document.getElementById("score").innerText = "Score: 0";
     document.querySelectorAll(".tile").forEach((tile) => tile.replaceChildren());
     playSystemSound();
     playSound("restart", 1.0);
@@ -118,14 +118,14 @@ function selectTile() {
     startMusicOnce();
     if (this == currMoleTile) {
         score += 10;
-        document.getElementById("score").innerText = `Điểm: ${score}`;
+        document.getElementById("score").innerText = `Score: ${score}`;
         playSound("moleHit", 1.0);
     }
     else if (this == currPlantTile) {
         gameOver = true;
         clearInterval(moleInterval);
         clearInterval(plantInterval);
-        document.getElementById("score").innerText = `GAME OVER — Điểm: ${score}`;
+        document.getElementById("score").innerText = `GAME OVER — Score: ${score}`;
         playSound("gameOver", 1.0);
         // Nhạc được tắt trong lúc thua; chơi lại sẽ tự bật nếu người chơi chưa tắt nhạc trong cài đặt.
         document.getElementById("theme-music").pause();

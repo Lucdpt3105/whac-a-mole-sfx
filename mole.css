@@ -28,13 +28,16 @@ body {
 h1 { margin: 0; font-size: clamp(2rem, 7vw, 3rem); text-shadow: 2px 3px 0 #552700; }
 #score { margin: 10px 0 16px; font-size: 1.35rem; font-weight: 700; text-shadow: 1px 2px 2px #000; }
 .controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 14px; }
-.icon-button { width: 64px; height: 64px; padding: 0; border: 2px solid #fff; border-radius: 14px; color: #fff; background-color: rgb(0 0 0 / 18%); background-position: center; background-size: contain; background-repeat: no-repeat; font: 700 1.8rem/1 Arial, sans-serif; cursor: pointer; }
+
+.icon-button { width: 110px; height: 64px; display: flex; align-items: center; justify-content: center;
+    flex: 0 0 auto; padding: 0; border: 4px solid #fff; border-radius: 14px; color: #fff; background-color: rgb(0 0 0 / 18%); background-position: center; background-size: contain; background-repeat: no-repeat; font: 700 1.8rem/1 Arial, sans-serif; cursor: pointer; }
+
 .icon-button span { display: none; }
 .icon-button:focus-visible { outline: 3px solid #ffe24f; outline-offset: 2px; }
-.restart-icon { background-image: var(--ui-restart-icon); }
-.music-icon { background-image: var(--ui-music-icon); }
+.restart-icon { background-image: var(--ui-restart-icon); background-size: 80%; }
+.music-icon { background-image: var(--ui-music-icon); background-size: 68%; }
 .music-icon.is-muted { background-image: var(--ui-music-muted-icon); }
-.settings-icon { background-image: var(--ui-settings-icon); }
+.settings-icon { background-image: var(--ui-settings-icon); background-size: 50%; }
 .instructions { margin: 0 auto 16px; padding: 10px 16px; border-radius: 12px; background: rgb(0 0 0 / 72%); text-align: left; }
 .instructions h2 { margin: 0 0 5px; font-size: 1.1rem; }
 .instructions p { margin: 0; line-height: 1.45; }
