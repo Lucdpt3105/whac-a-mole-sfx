@@ -15,6 +15,8 @@ const soundEffects = {
     gameOver: new Audio("sounds/game-over.mp3"),
     restart: new Audio("sounds/restart.mp3"),
     click: new Audio("sounds/clicking-sound.mp3"),
+    uiClick: new Audio("sounds/ui-click.ogg"),
+    uiSwitch: new Audio("sounds/ui-switch.ogg"),
 };
 
 window.addEventListener("DOMContentLoaded", setGame);
@@ -34,15 +36,18 @@ function setGame() {
     document.getElementById("restart-button").addEventListener("click", restartGame);
     document.getElementById("music-button").addEventListener("click", toggleMusic);
     document.getElementById("settings-button").addEventListener("click", openSoundSettings);
-    document.getElementById("close-settings-button").addEventListener("click", playSystemSound);
+    document.getElementById("close-settings-button").addEventListener("click", () => playUiSound("uiClick"));
     document.getElementById("sound-settings").addEventListener("close", () => {
         document.getElementById("settings-button").setAttribute("aria-expanded", "false");
     });
-    document.querySelectorAll(".sound-volume").forEach((slider) => slider.addEventListener("input", updateAudioSettings));
+    document.querySelectorAll(".sound-volume").forEach((slider) => {
+        slider.addEventListener("input", updateAudioSettings);
+        slider.addEventListener("change", () => playUiSound("uiClick"));
+    });
     ["system-sound-toggle", "sfx-sound-toggle", "music-sound-toggle"].forEach((id) => {
         document.getElementById(id).addEventListener("change", () => {
             updateAudioSettings();
-            playSystemSound();
+            playUiSound("uiSwitch");
         });
     });
     document.addEventListener("pointerdown", startMusicOnce, { once: true });
@@ -63,9 +68,10 @@ function restartGame() {
     gameOver = false;
     currMoleTile = null;
     currPlantTile = null;
-    document.getElementById("score").innerText = "Điểm: 0";
+    document.getElementById("score").innerText = "Score: 0";
     document.querySelectorAll(".tile").forEach((tile) => tile.replaceChildren());
     playSystemSound();
+    playSound("restart", 1.0);
     applyMusicState();
     startMusicOnce();
     startRound();
@@ -112,14 +118,14 @@ function selectTile() {
     startMusicOnce();
     if (this == currMoleTile) {
         score += 10;
-        document.getElementById("score").innerText = `Điểm: ${score}`;
+        document.getElementById("score").innerText = `Score: ${score}`;
         playSound("moleHit", 1.0);
     }
     else if (this == currPlantTile) {
         gameOver = true;
         clearInterval(moleInterval);
         clearInterval(plantInterval);
-        document.getElementById("score").innerText = `GAME OVER — Điểm: ${score}`;
+        document.getElementById("score").innerText = `GAME OVER — Score: ${score}`;
         playSound("gameOver", 1.0);
         // Nhạc được tắt trong lúc thua; chơi lại sẽ tự bật nếu người chơi chưa tắt nhạc trong cài đặt.
         document.getElementById("theme-music").pause();
@@ -144,6 +150,15 @@ function playSystemSound() {
     instance.play().catch(() => {});
 }
 
+function playUiSound(name) {
+    if (!audioSettings.system) return;
+    const sound = soundEffects[name];
+    if (!sound) return;
+    const instance = sound.cloneNode();
+    instance.volume = audioSettings.systemVolume;
+    instance.play().catch(() => {});
+}
+
 function startMusicOnce() {
     const music = document.getElementById("theme-music");
     if (!musicStarted && audioSettings.music && !music.muted && !gameOver) {
@@ -163,7 +178,7 @@ function openSoundSettings() {
     const dialog = document.getElementById("sound-settings");
     if (!dialog.open) dialog.showModal();
     document.getElementById("settings-button").setAttribute("aria-expanded", "true");
-    playSystemSound();
+    playUiSound("uiClick");
 }
 
 function updateAudioSettings() {
