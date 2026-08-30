@@ -6,6 +6,12 @@
     --ui-music-icon: url("./asset/icon-music.png");
     --ui-music-muted-icon: url("./asset/no-music.png");
     --ui-settings-icon: url("./asset/icon-settings.png");
+    --kenney-yellow-close: url("./asset/ui/kenney-button-yellow-close.png");
+    --kenney-yellow-button-border: url("./asset/ui/kenney-button-yellow-border.png");
+    --kenney-check-on: url("./asset/ui/kenney-check-green-on.png");
+    --kenney-check-off: url("./asset/ui/kenney-check-off.png");
+    --kenney-grey-slider: url("./asset/ui/kenney-slider-grey.svg");
+    --kenney-slider-handle: url("./asset/ui/kenney-slider-handle-green.png");
 }
 
 body {
@@ -73,21 +79,23 @@ h1 { margin: 0; font-size: clamp(2rem, 7vw, 3rem); text-shadow: 2px 3px 0 #55270
     -ms-user-select: none;
 }
 
-.sound-settings { width: min(92vw, 420px); border: 3px solid #fff; border-radius: 18px; padding: 0; color: #fff; background: #3b1d0d; box-shadow: 0 16px 40px rgb(0 0 0 / 50%); }
-.sound-settings::backdrop { background: rgb(0 0 0 / 58%); }
-.sound-settings form { padding: 18px; }
+.sound-settings { width: min(92vw, 460px); padding: 0; border: 4px solid #315525; color: #fff9d8; background: #275026; box-shadow: 0 12px 30px rgb(0 0 0 / 45%); }
+.sound-settings::backdrop { background: rgb(21 12 8 / 56%); }
+.sound-settings form { padding: 16px; }
 .settings-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.settings-heading h2 { margin: 0; font-size: 1.6rem; }
-.dialog-close { width: 34px; height: 34px; border: 2px solid #fff; border-radius: 50%; color: #fff; background: #d52b1e; font-size: 1.5rem; line-height: 1; cursor: pointer; }
-.sound-settings p { margin: 8px 0 16px; color: #ffe8b4; }
+.settings-heading h2 { margin: 0; color: #fff1a8; text-shadow: 2px 2px 0 #173818; }
+.dialog-close { width: 36px; height: 36px; border: 0; color: #315525; background: var(--kenney-yellow-close) center / 100% 100% no-repeat; font-size: 1.4rem; cursor: pointer; text-shadow: 1px 1px 0 #fff4ac; }
+.sound-settings p { margin: 8px 0 16px; color: #e7f2a6; }
 .sound-options { display: grid; gap: 10px; }
-.sound-option { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px; border-radius: 10px; background: rgb(255 255 255 / 12%); cursor: pointer; text-align: left; }
+.sound-option { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 58px; padding: 10px 14px 13px; background: var(--kenney-yellow-button-border) center / 100% 100% no-repeat; color: #244723; cursor: pointer; text-align: left; }
 .sound-option-copy { display: grid; gap: 3px; }
-.sound-option small { color: #ffe8b4; }
-.sound-controls { display: grid; grid-template-columns: minmax(72px, 1fr) 40px 42px; align-items: center; gap: 7px; min-width: 180px; }
-.sound-volume { width: 100%; accent-color: #ffe24f; cursor: pointer; }
-.sound-controls output { font-variant-numeric: tabular-nums; color: #ffe8b4; text-align: right; font-size: .85rem; }
-.sound-controls input[type="checkbox"] { width: 42px; height: 23px; margin: 0; accent-color: #4bc34b; cursor: pointer; }
-.sound-option:has(input[type="checkbox"]:not(:checked)) .sound-volume { opacity: .45; }
+.sound-option small { color: #507244; }
+.sound-controls { display: grid; flex: 0 0 236px; grid-template-columns: 150px 42px 30px; align-items: center; gap: 7px; width: 236px; }
+.sound-volume { width: 100%; height: 18px; margin: 0; appearance: none; background: var(--kenney-grey-slider) center / 100% 100% no-repeat; cursor: pointer; }
+.sound-volume::-webkit-slider-thumb { width: 20px; height: 20px; appearance: none; background: var(--kenney-slider-handle) center / 100% 100% no-repeat; }
+.sound-volume::-moz-range-thumb { width: 20px; height: 20px; border: 0; background: var(--kenney-slider-handle) center / 100% 100% no-repeat; }
+.sound-controls output { font-variant-numeric: tabular-nums; color: #315525; text-align: right; font-size: .85rem; font-weight: 700; }
+.sound-controls input[type="checkbox"] { width: 28px; height: 28px; margin: 0; appearance: none; border: 0; background: var(--kenney-check-off) center / 100% 100% no-repeat; cursor: pointer; }
+.sound-controls input[type="checkbox"]:checked { background-image: var(--kenney-check-on); }
 
-@media (max-width: 420px) { body { padding-top: 16px; } .controls button { padding: 9px 11px; } .sound-option { align-items: start; flex-direction: column; } .sound-controls { width: 100%; } }
+@media (max-width: 420px) { body { padding-top: 16px; } .controls button { padding: 9px 11px; } .sound-option { align-items: start; flex-direction: column; } .sound-controls { flex: none; grid-template-columns: minmax(0, 1fr) 42px 30px; width: 100%; } }
