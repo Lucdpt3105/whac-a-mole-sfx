@@ -3,15 +3,15 @@
 /* Icon UI hiện lấy trực tiếp từ asset bạn đã thêm. */
 :root {
     --ui-restart-icon: url("./asset/icon-restart.avif");
-    --ui-music-icon: url("./asset/icon-music.png");
-    --ui-music-muted-icon: url("./asset/no-music.png");
-    --ui-settings-icon: url("./asset/icon-settings.png");
-    --kenney-yellow-close: url("./asset/ui/kenney-button-yellow-close.png");
-    --kenney-yellow-button-border: url("./asset/ui/kenney-button-yellow-border.png");
-    --kenney-check-on: url("./asset/ui/kenney-check-green-on.png");
-    --kenney-check-off: url("./asset/ui/kenney-check-off.png");
-    --kenney-grey-slider: url("./asset/ui/kenney-slider-grey.svg");
-    --kenney-slider-handle: url("./asset/ui/kenney-slider-handle-green.png");
+    --ui-music-icon: url("./asset/icon-music.webp");
+    --ui-music-muted-icon: url("./asset/no-music.webp");
+    --ui-settings-icon: url("./asset/icon-settings.webp");
+    --kenney-yellow-close: url("./asset/ui/kenney-button-yellow-close.webp");
+    --kenney-yellow-button-border: url("./asset/ui/kenney-button-yellow-border.webp");
+    --kenney-check-on: url("./asset/ui/kenney-check-green-on.webp");
+    --kenney-check-off: url("./asset/ui/kenney-check-off.webp");
+    --kenney-grey-slider: url("./asset/ui/kenney-slider-grey.webp");
+    --kenney-slider-handle: url("./asset/ui/kenney-slider-handle-green.webp");
 }
 
 body {
