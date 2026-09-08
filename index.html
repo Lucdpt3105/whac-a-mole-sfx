@@ -10,7 +10,10 @@
 <body>
     <main class="game-shell">
         <h1>Whac-a-Mole</h1>
-        <p id="score" aria-live="polite">Score: 0</p>
+        <div class="game-status" aria-live="polite">
+            <p id="score">Score: 0</p>
+            <p id="level">Cấp độ: 1</p>
+        </div>
         <section class="controls" aria-label="Điều khiển trò chơi">
             <button id="restart-button" class="icon-button restart-icon" type="button" aria-label="Chơi lại" title="Chơi lại">
                 <span aria-hidden="true">↻</span>
@@ -62,6 +65,18 @@
                 </label>
             </div>
         </form>
+    </dialog>
+    <dialog id="question-dialog" class="question-dialog" aria-labelledby="question-title" aria-describedby="question-text">
+        <section class="question-card">
+            <div class="question-heading">
+                <span id="question-difficulty" class="difficulty-badge">Dễ</span>
+                <span id="question-timer" class="question-timer" aria-live="assertive">10s</span>
+            </div>
+            <h2 id="question-title">Thử thách kiến thức</h2>
+            <p id="question-text"></p>
+            <form id="question-form" class="question-options"></form>
+            <p id="question-feedback" class="question-feedback" aria-live="polite"></p>
+        </section>
     </dialog>
     <!-- Nhạc nền chỉ bắt đầu sau lần chạm đầu tiên, theo chính sách trình duyệt. -->
     <audio id="theme-music" src="./sounds/theme-music.mp3" loop preload="auto"></audio>
