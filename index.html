@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whac-a-Mole</title>
     <link rel="stylesheet" href="./mole.css">
+    <script src="./data/opentdb.js" defer></script>
     <script src="./mole.js" defer></script>
 </head>
 <body>
@@ -12,37 +13,37 @@
         <h1>Whac-a-Mole</h1>
         <div class="game-status" aria-live="polite">
             <p id="score">Score: 0</p>
-            <p id="level">Cấp độ: 1</p>
+            <p id="level">Level: 1</p>
         </div>
-        <section class="controls" aria-label="Điều khiển trò chơi">
-            <button id="restart-button" class="icon-button restart-icon" type="button" aria-label="Chơi lại" title="Chơi lại">
+        <section class="controls" aria-label="Game controls">
+            <button id="restart-button" class="icon-button restart-icon" type="button" aria-label="Restart" title="Restart">
                 <span aria-hidden="true">↻</span>
             </button>
-            <button id="music-button" class="icon-button music-icon" type="button" aria-label="Tắt nhạc nền" title="Bật/tắt nhạc nền" aria-pressed="true">
+            <button id="music-button" class="icon-button music-icon" type="button" aria-label="Mute background music" title="Toggle background music" aria-pressed="true">
                 <span aria-hidden="true">♫</span>
             </button>
-            <button id="settings-button" class="icon-button settings-icon" type="button" aria-label="Mở cài đặt âm thanh" title="Cài đặt âm thanh" aria-expanded="false" aria-controls="sound-settings">
+            <button id="settings-button" class="icon-button settings-icon" type="button" aria-label="Open audio settings" title="Audio settings" aria-expanded="false" aria-controls="sound-settings">
                 <span aria-hidden="true">⚙</span>
             </button>
         </section>
         <!-- <section class="instructions" aria-labelledby="instructions-title">
-            <h2 id="instructions-title">Cách chơi</h2>
-            <p>Nhấp vào chú chuột chũi để nhận 10 điểm. Đừng nhấp vào cây ăn thịt — trò chơi sẽ kết thúc!</p>
+            <h2 id="instructions-title">How to play</h2>
+            <p>Whack the mole to earn 10 points. Do not hit the carnivorous plant or the game will end!</p>
         </section> -->
-        <div id="board" role="grid" aria-label="Bàn chơi Whac-a-Mole"></div>
+        <div id="board" role="grid" aria-label="Whac-a-Mole game board"></div>
     </main>
     <dialog id="sound-settings" class="sound-settings" aria-labelledby="sound-settings-title">
         <form method="dialog">
             <div class="settings-heading">
                 <h2 id="sound-settings-title">Settings</h2>
-                <button id="close-settings-button" class="dialog-close" type="submit" aria-label="Đóng cài đặt">×</button>
+                <button id="close-settings-button" class="dialog-close" type="submit" aria-label="Close settings">×</button>
             </div>
-            <!-- <p>Chọn các loại âm thanh bạn muốn nghe.</p> -->
+            <!-- <p>Choose which sounds you want to hear.</p> -->
             <div class="sound-options">
                 <label class="sound-option" for="system-sound-toggle">
                     <span class="sound-option-copy"><strong>System sounds</strong></span>
                     <span class="sound-controls">
-                        <input id="system-sound-volume" class="sound-volume" type="range" min="0" max="100" value="55" aria-label="Âm lượng hệ thống">
+                        <input id="system-sound-volume" class="sound-volume" type="range" min="0" max="100" value="55" aria-label="System sound volume">
                         <output id="system-sound-volume-value" for="system-sound-volume">55%</output>
                         <input id="system-sound-toggle" type="checkbox" role="switch" checked>
                     </span>
@@ -50,15 +51,15 @@
                 <label class="sound-option" for="sfx-sound-toggle">
                     <span class="sound-option-copy"><strong>Sound Effects (SFX)</strong></span>
                     <span class="sound-controls">
-                        <input id="sfx-sound-volume" class="sound-volume" type="range" min="0" max="100" value="100" aria-label="Âm lượng hiệu ứng">
-                        <output id="sfx-sound-volume-value" for="sfx-sound-volume">100%</output>
+                        <input id="sfx-sound-volume" class="sound-volume" type="range" min="0" max="100" value="85" aria-label="Sound effects volume">
+                        <output id="sfx-sound-volume-value" for="sfx-sound-volume">85%</output>
                         <input id="sfx-sound-toggle" type="checkbox" role="switch" checked>
                     </span>
                 </label>
                 <label class="sound-option" for="music-sound-toggle">
                     <span class="sound-option-copy"><strong>Background Music</strong></span>
                     <span class="sound-controls">
-                        <input id="music-sound-volume" class="sound-volume" type="range" min="0" max="100" value="50" aria-label="Âm lượng nhạc nền">
+                        <input id="music-sound-volume" class="sound-volume" type="range" min="0" max="100" value="50" aria-label="Background music volume">
                         <output id="music-sound-volume-value" for="music-sound-volume">50%</output>
                         <input id="music-sound-toggle" type="checkbox" role="switch" checked>
                     </span>
@@ -69,16 +70,16 @@
     <dialog id="question-dialog" class="question-dialog" aria-labelledby="question-title" aria-describedby="question-text">
         <section class="question-card">
             <div class="question-heading">
-                <span id="question-difficulty" class="difficulty-badge">Dễ</span>
+                <span id="question-difficulty" class="difficulty-badge">Easy</span>
                 <span id="question-timer" class="question-timer" aria-live="assertive">10s</span>
             </div>
-            <h2 id="question-title">Thử thách kiến thức</h2>
+            <!-- <h2 id="question-title">Thử thách kiến thức</h2> -->
             <p id="question-text"></p>
             <form id="question-form" class="question-options"></form>
             <p id="question-feedback" class="question-feedback" aria-live="polite"></p>
         </section>
     </dialog>
-    <!-- Nhạc nền chỉ bắt đầu sau lần chạm đầu tiên, theo chính sách trình duyệt. -->
+    <!-- Background music starts after the first interaction due to browser policy. -->
     <audio id="theme-music" src="./sounds/theme-music.mp3" loop preload="auto"></audio>
 </body>
 </html>

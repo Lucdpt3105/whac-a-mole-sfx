@@ -1,15 +1,15 @@
 let currMoleTile = null, plantTiles = new Set(), score = 0, gameOver = false, gamePaused = false;
 let moleTimeout, plantTimeout, questionTimer, activeQuestion = null, questionTile = null, musicStarted = false, questions = [];
-const QUESTION_SPAWN_CHANCE = 20; // Tỉ lệ 20%: random trong khoảng 0–20 trên thang 0–100.
+const QUESTION_SPAWN_CHANCE = 40; // 40% chance: random value from 0 to 40 on a 0 to 100 scale.
 const LEVELS = [
     { minScore: 0, moleDelay: 1000, plantDelay: 2300, plantCount: 1 },
     { minScore: 80, moleDelay: 850, plantDelay: 1900, plantCount: 2 },
     { minScore: 180, moleDelay: 700, plantDelay: 1600, plantCount: 3 },
     { minScore: 320, moleDelay: 570, plantDelay: 1350, plantCount: 4 },
 ];
-const difficultyLabels = { easy: "Dễ", medium: "Trung bình", hard: "Khó" };
-const audioSettings = { system: true, sfx: true, music: true, systemVolume: .55, sfxVolume: 1, musicVolume: .5 };
-const soundEffects = { moleHit: new Audio("sounds/mole-hit.mp3"), wrongHit: new Audio("sounds/wrong-hit.mp3"), gameOver: new Audio("sounds/game-over.mp3"), restart: new Audio("sounds/restart.mp3"), click: new Audio("sounds/clicking-sound.mp3"), uiClick: new Audio("sounds/ui-click.ogg"), uiSwitch: new Audio("sounds/ui-switch.ogg") };
+const difficultyLabels = { easy: "Easy", medium: "Medium", hard: "Hard" };
+const audioSettings = { system: true, sfx: true, music: true, systemVolume: .55, sfxVolume: .85, musicVolume: .5 };
+const soundEffects = { moleHit: new Audio("sounds/mole-hit.mp3"), wrongHit: new Audio("sounds/wrong-hit.mp3"), fail: new Audio("sounds/fail.mp3"), gameOver: new Audio("sounds/game-over.mp3"), restart: new Audio("sounds/restart.mp3"), click: new Audio("sounds/clicking-sound.mp3"), uiClick: new Audio("sounds/ui-click.ogg"), uiSwitch: new Audio("sounds/ui-switch.ogg") };
 
 window.addEventListener("DOMContentLoaded", setGame);
 
@@ -18,7 +18,7 @@ async function setGame() {
     for (let i = 0; i < 9; i += 1) {
         const tile = document.createElement("button");
         tile.id = String(i); tile.type = "button"; tile.className = "tile";
-        tile.setAttribute("role", "gridcell"); tile.setAttribute("aria-label", `Ô ${i + 1}`);
+        tile.setAttribute("role", "gridcell"); tile.setAttribute("aria-label", `Tile ${i + 1}`);
         tile.addEventListener("click", selectTile); board.appendChild(tile);
     }
     bindControls(); questions = await loadQuestions();
@@ -37,12 +37,12 @@ function bindControls() {
 }
 
 async function loadQuestions() {
-    try { const response = await fetch("./questions.json"); if (!response.ok) throw new Error(); const data = await response.json(); return Array.isArray(data.questions) ? data.questions : []; }
-    catch { console.warn("Không tải được questions.json; game tiếp tục không có câu hỏi."); return []; }
+    try { return await window.OpenTdbQuestions.load(); }
+    catch (error) { console.warn("Could not load questions from the local dataset.", error); return []; }
 }
 
 function getLevel() { return LEVELS.reduce((current, level, index) => score >= level.minScore ? { ...level, number: index + 1 } : current, { ...LEVELS[0], number: 1 }); }
-function updateStatus() { const level = getLevel(); document.getElementById("score").textContent = `Score: ${score}`; document.getElementById("level").textContent = `Cấp độ: ${level.number}`; }
+function updateStatus() { const level = getLevel(); document.getElementById("score").textContent = `Score: ${score}`; document.getElementById("level").textContent = `Level: ${level.number}`; }
 function stopSpawning() { clearTimeout(moleTimeout); clearTimeout(plantTimeout); }
 function startRound() { stopSpawning(); if (!gameOver && !gamePaused) { scheduleMole(); schedulePlants(); } }
 function scheduleMole() { if (gameOver || gamePaused) return; setMole(); moleTimeout = setTimeout(scheduleMole, getLevel().moleDelay); }
@@ -61,8 +61,8 @@ function setMole() {
     if (gameOver || gamePaused || questionTile) return;
     if (currMoleTile) clearTile(currMoleTile);
     const tile = getRandomFreeTile(plantTiles); if (!tile) return;
-    const mole = document.createElement("img"); mole.src = "./asset/monty-mole.webp"; mole.alt = "Chuột chũi"; tile.appendChild(mole); currMoleTile = tile;
-    if (questions.length && Math.random() * 100 < QUESTION_SPAWN_CHANCE) { questionTile = tile; tile.classList.add("question-mole"); tile.setAttribute("aria-label", `Chuột thử thách ở ô ${Number(tile.id) + 1}`); }
+    const mole = document.createElement("img"); mole.src = "./asset/monty-mole.webp"; mole.alt = "Mole"; tile.appendChild(mole); currMoleTile = tile;
+    if (questions.length && Math.random() * 100 < QUESTION_SPAWN_CHANCE) { questionTile = tile; tile.classList.add("question-mole"); tile.setAttribute("aria-label", `Challenge mole in tile ${Number(tile.id) + 1}`); }
 }
 function setPlants() {
     if (gameOver || gamePaused) return;
@@ -70,7 +70,7 @@ function setPlants() {
     const unavailable = new Set(currMoleTile ? [currMoleTile] : []);
     for (let i = 0; i < getLevel().plantCount; i += 1) {
         const tile = getRandomFreeTile(unavailable); if (!tile) break;
-        const plant = document.createElement("img"); plant.src = "./asset/piranha-plant.webp"; plant.alt = "Cây ăn thịt"; tile.appendChild(plant); plantTiles.add(tile); unavailable.add(tile);
+        const plant = document.createElement("img"); plant.src = "./asset/piranha-plant.webp"; plant.alt = "Carnivorous plant"; tile.appendChild(plant); plantTiles.add(tile); unavailable.add(tile);
     }
 }
 
@@ -86,17 +86,17 @@ function openQuestion() {
     activeQuestion = questions[Math.floor(Math.random() * questions.length)]; gamePaused = true; stopSpawning();
     const dialog = document.getElementById("question-dialog"), form = document.getElementById("question-form");
     document.getElementById("question-text").textContent = activeQuestion.question;
-    document.getElementById("question-difficulty").textContent = `${difficultyLabels[activeQuestion.difficulty] || activeQuestion.difficulty} · +${activeQuestion.points} điểm`;
+    document.getElementById("question-difficulty").textContent = `${difficultyLabels[activeQuestion.difficulty] || activeQuestion.difficulty} · +${activeQuestion.points} points`;
     const feedback = document.getElementById("question-feedback"); feedback.textContent = ""; feedback.className = "question-feedback";
     form.replaceChildren(...activeQuestion.choices.map((choice) => { const button = document.createElement("button"); button.type = "button"; button.className = "question-option"; button.textContent = choice.text; button.addEventListener("click", () => answerQuestion(choice.id)); return button; }));
     let seconds = 10; document.getElementById("question-timer").textContent = `${seconds}s`; dialog.showModal();
-    questionTimer = setInterval(() => { seconds -= 1; document.getElementById("question-timer").textContent = `${seconds}s`; if (seconds <= 0) resolveQuestion(false, "Hết giờ — lần này chưa có điểm."); }, 1000);
+    questionTimer = setInterval(() => { seconds -= 1; document.getElementById("question-timer").textContent = `${seconds}s`; if (seconds <= 0) resolveQuestion(false, "Time is up — no points this time."); }, 1000);
 }
-function answerQuestion(answerId) { if (activeQuestion) resolveQuestion(answerId === activeQuestion.correctAnswer, answerId === activeQuestion.correctAnswer ? `Chính xác! +${activeQuestion.points} điểm.` : "Chưa đúng — lần này chưa có điểm."); }
+function answerQuestion(answerId) { if (activeQuestion) resolveQuestion(answerId === activeQuestion.correctAnswer, answerId === activeQuestion.correctAnswer ? `Correct! +${activeQuestion.points} points.` : "Incorrect — no points this time."); }
 function resolveQuestion(correct, message) {
     if (!activeQuestion) return; clearInterval(questionTimer); document.querySelectorAll(".question-option").forEach((button) => { button.disabled = true; });
     const feedback = document.getElementById("question-feedback"); feedback.textContent = message; feedback.className = `question-feedback ${correct ? "is-success" : "is-error"}`;
-    if (correct) { score += activeQuestion.points; playSound("moleHit"); } else playSound("wrongHit"); updateStatus(); window.setTimeout(closeQuestionAndResume, 850);
+    if (correct) { score += activeQuestion.points; playSound("moleHit"); } else playSound("fail"); updateStatus(); window.setTimeout(closeQuestionAndResume, 850);
 }
 function closeQuestionAndResume() { const dialog = document.getElementById("question-dialog"); if (dialog.open) dialog.close(); if (questionTile) clearTile(questionTile); activeQuestion = null; gamePaused = false; if (!gameOver) startRound(); }
 function endGame() { gameOver = true; stopSpawning(); document.getElementById("score").textContent = `GAME OVER — Score: ${score}`; playSound("gameOver"); document.getElementById("theme-music").pause(); }
@@ -109,4 +109,4 @@ function toggleMusic() { audioSettings.music = !audioSettings.music; document.ge
 function openSoundSettings() { const dialog = document.getElementById("sound-settings"); if (!dialog.open) dialog.showModal(); document.getElementById("settings-button").setAttribute("aria-expanded", "true"); playUiSound("uiClick"); }
 function updateAudioSettings() { audioSettings.system = document.getElementById("system-sound-toggle").checked; audioSettings.sfx = document.getElementById("sfx-sound-toggle").checked; audioSettings.music = document.getElementById("music-sound-toggle").checked; audioSettings.systemVolume = getVolume("system"); audioSettings.sfxVolume = getVolume("sfx"); audioSettings.musicVolume = getVolume("music"); applyMusicState(); }
 function getVolume(channel) { const slider = document.getElementById(`${channel}-sound-volume`), value = Number(slider.value); document.getElementById(`${channel}-sound-volume-value`).value = `${value}%`; return value / 100; }
-function applyMusicState() { const music = document.getElementById("theme-music"), button = document.getElementById("music-button"); music.muted = !audioSettings.music; music.volume = audioSettings.musicVolume; button.classList.toggle("is-muted", !audioSettings.music); button.setAttribute("aria-pressed", String(audioSettings.music)); button.setAttribute("aria-label", audioSettings.music ? "Tắt nhạc nền" : "Bật nhạc nền"); if (audioSettings.music && !gameOver) startMusicOnce(); if (!audioSettings.music) music.pause(); if (audioSettings.music && musicStarted && !gameOver) music.play().catch(() => {}); }
+function applyMusicState() { const music = document.getElementById("theme-music"), button = document.getElementById("music-button"); music.muted = !audioSettings.music; music.volume = audioSettings.musicVolume; button.classList.toggle("is-muted", !audioSettings.music); button.setAttribute("aria-pressed", String(audioSettings.music)); button.setAttribute("aria-label", audioSettings.music ? "Mute background music" : "Unmute background music"); if (audioSettings.music && !gameOver) startMusicOnce(); if (!audioSettings.music) music.pause(); if (audioSettings.music && musicStarted && !gameOver) music.play().catch(() => {}); }

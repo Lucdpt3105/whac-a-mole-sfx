@@ -1,6 +1,6 @@
 * { box-sizing: border-box; }
 
-/* Icon UI hiện lấy trực tiếp từ asset bạn đã thêm. */
+/* UI icons are loaded directly from the provided assets. */
 :root {
     --ui-restart-icon: url("./asset/icon-restart.avif");
     --ui-music-icon: url("./asset/icon-music.webp");
